@@ -1,1 +1,52 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>VibeLoop Africa</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="assets/icon-512.png">
+  <meta name="theme-color" content="#8b5cf6">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.12.6/dist/ffmpeg.min.js"></script>
+  <style>
+    .snap-y { scroll-snap-type: y mandatory; }
+    .video-card { scroll-snap-align: start; scroll-snap-stop: always; }
+    video { pointer-events: none; object-fit: cover; }
+    .loader { border: 3px solid #f3f3f3; border-top: 3px solid #8b5cf6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .comments-panel { background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); border-radius: 20px 20px 0 0; max-height: 60vh; overflow-y: auto; }
+  </style>
+</head>
+<body class="bg-black text-white">
+  <div id="loginScreen" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 to-black p-6 fixed inset-0 z-50 transition-all">
+    <div class="text-center max-w-md w-full">
+      <i class="fas fa-waveform text-6xl text-purple-400"></i>
+      <h1 class="text-4xl font-black mt-2 bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">VibeLoop Africa</h1>
+      <p class="text-gray-300">Low data. High vibes.</p>
+      <div class="mt-8 bg-white/10 backdrop-blur rounded-2xl p-6 space-y-3">
+        <input id="loginEmail" type="email" placeholder="Email" class="w-full bg-black/50 border border-white/20 rounded-xl p-3 text-white">
+        <input id="loginPass" type="password" placeholder="Password" class="w-full bg-black/50 border border-white/20 rounded-xl p-3 text-white">
+        <button id="emailLoginBtn" class="w-full bg-purple-600 py-3 rounded-xl font-bold">Login</button>
+        <button id="emailSignupBtn" class="w-full border border-white/30 py-3 rounded-xl">Create Account</button>
+        <div class="relative"><div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/20"></div></div><div class="relative flex justify-center text-xs"><span class="bg-black px-2">OR</span></div></div>
+        <button id="googleLoginBtn" class="w-full bg-white/10 hover:bg-white/20 py-3 rounded-xl flex items-center justify-center gap-2"><i class="fab fa-google"></i> Google</button>
+      </div>
+      <p class="text-xs text-gray-400 mt-4">By continuing, you agree to our Terms</p>
+    </div>
+  </div>
+  <div id="mainApp" class="hidden relative h-screen">
+    <div class="fixed bottom-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-2xl border-t border-white/10 flex justify-around py-2 safe-bottom">
+      <button data-nav="feed" class="nav-btn flex flex-col items-center text-xs text-purple-500"><i class="fas fa-play-circle text-2xl"></i><span>Home</span></button>
+      <button data-nav="trending" class="nav-btn flex flex-col items-center text-xs text-gray-400"><i class="fas fa-fire text-2xl"></i><span>Trending</span></button>
+      <button data-nav="chat" class="nav-btn flex flex-col items-center text-xs text-gray-400"><i class="fas fa-comment-dots text-2xl"></i><span>Chat</span></button>
+      <button data-nav="profile" class="nav-btn flex flex-col items-center text-xs text-gray-400"><i class="fas fa-user text-2xl"></i><span>Me</span></button>
+    </div>
+    <button id="uploadFab" class="fixed right-5 bottom-24 bg-gradient-to-r from-purple-600 to-pink-600 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-white text-2xl z-50"><i class="fas fa-plus"></i></button>
+    <div id="contentArea" class="pb-20 h-full overflow-y-auto"></div>
+    <input type="file" id="videoUploadInput" accept="video/*" class="hidden" />
+  </div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
