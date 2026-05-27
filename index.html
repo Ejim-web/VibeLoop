@@ -65,9 +65,9 @@
     appId: "1:776248914692:web:b883192e8498e5a5351651"
   };
 
-  // Cloudinary - using a truly unsigned preset (you must create it)
+  // Cloudinary configuration
   const CLOUDINARY_CLOUD_NAME = "dweyrxxr8";
-  const CLOUDINARY_UPLOAD_PRESET = "vibeloop_unsigned";  // Create this unsigned preset in Cloudinary
+  const CLOUDINARY_UPLOAD_PRESET = "vibeloop_video";  // your unsigned preset
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
@@ -80,6 +80,7 @@
   const sendGift = httpsCallable(functions, 'sendGift');
   const sendNotification = httpsCallable(functions, 'sendNotification');
 
+  // Global state
   let currentUser = null;
   let activeTab = 'feed';
   let feedVideos = [];
@@ -101,7 +102,7 @@
 
   function escapeHtml(str) { return str?.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])) || ''; }
 
-  // ==================== CLOUDINARY VIDEO UPLOAD (UNSIGNED PRESET) ====================
+  // ==================== CLOUDINARY VIDEO UPLOAD (FIXED) ====================
   async function uploadVideo(file, caption) {
     const banned = ['spam','scam','sex','porn','hate'];
     if (banned.some(w => caption.toLowerCase().includes(w))) return showToast("Banned word", "error");
@@ -151,8 +152,11 @@
         showToast("Uploaded successfully!");
         loadFeed(true);
       } else {
-        console.error("Cloudinary error:", data);
-        showToast("Upload failed: " + (data.error?.message || "Unknown error"), "error");
+        let errMsg = data.error?.message || "Unknown error";
+        if (errMsg.includes("unsigned") || errMsg.includes("whitelist")) {
+          errMsg = "Preset not configured for unsigned uploads. Please edit preset and ensure 'Signing mode' = Unsigned and 'Resource type' = video.";
+        }
+        showToast("Upload failed: " + errMsg, "error");
       }
     } catch (err) {
       console.error("Upload error:", err);
