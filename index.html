@@ -65,9 +65,9 @@
     appId: "1:776248914692:web:b883192e8498e5a5351651"
   };
 
-  // Cloudinary - using ml_default which definitely works for videos
+  // Cloudinary - using a truly unsigned preset (you must create it)
   const CLOUDINARY_CLOUD_NAME = "dweyrxxr8";
-  const CLOUDINARY_UPLOAD_PRESET = "ml_default";  // Cloudinary's default preset (works for videos)
+  const CLOUDINARY_UPLOAD_PRESET = "vibeloop_unsigned";  // Create this unsigned preset in Cloudinary
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
@@ -101,7 +101,7 @@
 
   function escapeHtml(str) { return str?.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])) || ''; }
 
-  // ==================== CLOUDINARY VIDEO UPLOAD (WORKING) ====================
+  // ==================== CLOUDINARY VIDEO UPLOAD (UNSIGNED PRESET) ====================
   async function uploadVideo(file, caption) {
     const banned = ['spam','scam','sex','porn','hate'];
     if (banned.some(w => caption.toLowerCase().includes(w))) return showToast("Banned word", "error");
@@ -121,6 +121,7 @@
       });
       
       const data = await response.json();
+      console.log("Cloudinary response:", data);
       
       if (response.ok && data.secure_url) {
         const videoId = Date.now() + '_' + Math.random().toString(36);
@@ -159,7 +160,7 @@
     }
   }
 
-  // ==================== REST OF THE APP (feed, interactions, etc.) ====================
+  // ==================== REST OF THE APP ====================
   async function requestNotificationPermission() {
     if (notificationsRequested) return;
     notificationsRequested = true;
