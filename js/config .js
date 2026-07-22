@@ -1,7 +1,7 @@
 export const CONFIG = {
   CLOUDINARY: {
-    cloudName: 'qgbhjuse',          // Replace with your Cloudinary cloud name
-    uploadPreset: 'vibeloop_uploads' // Replace with your unsigned preset
+    cloudName: 'qgbhjuse',
+    uploadPreset: 'vibeloop_uploads'
   },
   FIREBASE: {
     apiKey: 'AIzaSyCr1IkJ6_SMhTJvY3K3GG6SoIRe1LOZ0nQ',
@@ -20,6 +20,6 @@ export const CONFIG = {
     feedPageSize: 15
   },
   NOTIFICATIONS: {
-    vapidKey: 'YOUR_VAPID_KEY' // Replace with your Firebase Cloud Messaging VAPID key
+    vapidKey: 'YOUR_VAPID_KEY'
   }
 };
