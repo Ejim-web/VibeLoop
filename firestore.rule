@@ -1,0 +1,67 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth.token.admin == true;
+    }
+
+    match /users/{userId} {
+      allow read: if true;
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow update: if request.auth != null && request.auth.uid == userId;
+      allow delete: if false;
+    }
+
+    match /videos/{video} {
+      allow read: if true;
+      allow create: if request.auth != null && request.auth.token.email_verified == true;
+      allow update: if request.auth != null && (request.auth.uid == resource.data.creatorId || isAdmin());
+      allow delete: if request.auth != null && (request.auth.uid == resource.data.creatorId || isAdmin());
+    }
+
+    match /stories/{story} {
+      allow read: if true;
+      allow create: if request.auth != null && request.auth.token.email_verified == true && request.auth.uid == request.resource.data.userId;
+      allow update: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow delete: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+
+    match /comments/{comment} {
+      allow read: if true;
+      allow create: if request.auth != null && request.auth.token.email_verified == true;
+      allow update: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow delete: if request.auth != null && (request.auth.uid == resource.data.userId || isAdmin());
+    }
+
+    match /chats/{chatId}/messages/{message} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    match /reports/{report} {
+      allow read: if isAdmin();
+      allow create: if request.auth != null;
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /analytics/{document} {
+      allow read: if isAdmin() || request.auth != null && request.auth.uid == resource.data.userId;
+      allow write: if false;
+    }
+    match /aggregatedEvents/{document} {
+      allow read: if false;
+      allow write: if false;
+    }
+
+    match /admins/{admin} {
+      allow read, write: if isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
