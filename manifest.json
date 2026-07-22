@@ -1,0 +1,11 @@
+{
+  "name": "VibeLoop",
+  "short_name": "VibeLoop",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#8b5cf6",
+  "icons": [
+    { "src": "https://ui-avatars.com/api/?name=V&size=144", "sizes": "144x144", "type": "image/png" }
+  ]
+}
